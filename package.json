@@ -7,7 +7,7 @@
     "build": "rm -rf dist && ./node_modules/.bin/gulp build",
     "server": "./node_modules/.bin/gulp connect"
   },
-  "author": "danjford <github.com/danjford>",
+  "author": "Project Author Name",
   "license": "MIT",
   "devDependencies": {
     "babel-plugin-external-helpers-2": "^6.3.13",
