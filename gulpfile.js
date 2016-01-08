@@ -3,7 +3,10 @@ var gulp = require('gulp'),
   path = require('path'),
   babel = require( 'rollup-plugin-babel' ),
   rollup = require('gulp-rollup')
-  sourcemaps = require('gulp-sourcemaps');
+  sourcemaps = require('gulp-sourcemaps'),
+  ractive = require('gulp-ractive'),
+  concat = require('gulp-concat'),
+  declare = require('gulp-declare');
 
 gulp.task('clean', function() {
   return gulp.src('assets').pipe(rm());
@@ -12,10 +15,27 @@ gulp.task('clean', function() {
 gulp.task('copy', function() {
   gulp.src(['node_modules/ractive/ractive.js', 'node_modules/ractive/ractive.js.map', 'node_modules/lodestar-ractive/dist/lodestar-ractive.js'])
     .pipe(gulp.dest('dist/assets/js/'));
+  gulp.src(['./app/index.html'])
+    .pipe(gulp.dest('./dist/'));
 });
 
+
+gulp.task('precompile', function() {
+  return gulp.src('app/views/**/*.html')
+    .pipe(ractive({
+      preserveWhitespace: true
+    }))
+    .pipe(declare({
+      namespace: 'Templates',
+      noRedeclare: true
+    }))
+    .pipe(concat('templates.js'))
+    .pipe(gulp.dest('./dist/assets/js/'));
+});
+
+
 gulp.task('rollup', function() {
-  return gulp.src('./app/js/main.js', {read: false})
+  return gulp.src('./app/main.js', {read: false})
     .pipe(rollup({
       format: 'iife',
       moduleName: 'main',
@@ -32,9 +52,10 @@ gulp.task('rollup', function() {
 
 gulp.task('watch', function() {
   gulp.watch('./app/js/**/*.js', [ 'rollup' ]);
-  gulp.watch('./app/less/**/*.less', [ 'less' ]);
+  gulp.watch('./app/views/**/*.html', [ 'precompile' ]);
+  gulp.watch('./app/index.html', [ 'copy' ]);
 });
 
-gulp.task('default', ['copy', 'less', 'rollup', 'watch']);
+gulp.task('default', ['copy', 'rollup', 'precompile', 'watch']);
 
-gulp.task('build', ['copy', 'less', 'rollup']);
+gulp.task('build', ['copy', 'rollup', 'precompile']);
