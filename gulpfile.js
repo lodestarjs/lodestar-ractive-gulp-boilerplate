@@ -69,4 +69,4 @@ gulp.task('connect', function() {
 
 gulp.task('default', ['copy', 'rollup', 'precompile', 'connect', 'watch']);
 
-gulp.task('build', ['copy', 'rollup', 'connect', 'precompile']);
+gulp.task('build', ['copy', 'rollup', 'precompile']);
