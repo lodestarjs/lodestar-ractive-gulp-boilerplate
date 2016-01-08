@@ -4,7 +4,8 @@
   "description": "A project made using lodestar-ractive.",
   "scripts": {
     "start": "./node_modules/.bin/gulp",
-    "build": "rm -rf dist && ./node_modules/.bin/gulp build"
+    "build": "rm -rf dist && ./node_modules/.bin/gulp build",
+    "server": "./node_modules/.bin/gulp connect"
   },
   "author": "danjford <forddj93@gmail.com>",
   "license": "MIT",
@@ -16,6 +17,7 @@
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
     "gulp-concat": "^2.6.0",
+    "gulp-connect": "^2.3.1",
     "gulp-declare": "^0.3.0",
     "gulp-ractive": "^0.7.1",
     "gulp-rimraf": "^0.2.0",
