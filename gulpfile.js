@@ -6,7 +6,8 @@ var gulp = require('gulp'),
   sourcemaps = require('gulp-sourcemaps'),
   ractive = require('gulp-ractive'),
   concat = require('gulp-concat'),
-  declare = require('gulp-declare');
+  declare = require('gulp-declare'),
+  connect = require('gulp-connect');
 
 gulp.task('clean', function() {
   return gulp.src('assets').pipe(rm());
@@ -16,7 +17,8 @@ gulp.task('copy', function() {
   gulp.src(['node_modules/ractive/ractive.js', 'node_modules/ractive/ractive.js.map', 'node_modules/lodestar-ractive/dist/lodestar-ractive.js'])
     .pipe(gulp.dest('dist/assets/js/'));
   gulp.src(['./app/index.html'])
-    .pipe(gulp.dest('./dist/'));
+    .pipe(gulp.dest('./dist/'))
+    .pipe(connect.reload());
 });
 
 
@@ -30,7 +32,8 @@ gulp.task('precompile', function() {
       noRedeclare: true
     }))
     .pipe(concat('templates.js'))
-    .pipe(gulp.dest('./dist/assets/js/'));
+    .pipe(gulp.dest('./dist/assets/js/'))
+    .pipe(connect.reload());
 });
 
 
@@ -46,7 +49,8 @@ gulp.task('rollup', function() {
       external: [ 'lodestar-ractive' ]
     }))
     .pipe(sourcemaps.write(".")) // this only works if the sourceMap option is true
-    .pipe(gulp.dest('dist/assets/js/'));
+    .pipe(gulp.dest('dist/assets/js/'))
+    .pipe(connect.reload());
 });
 
 
@@ -56,6 +60,13 @@ gulp.task('watch', function() {
   gulp.watch('./app/index.html', [ 'copy' ]);
 });
 
-gulp.task('default', ['copy', 'rollup', 'precompile', 'watch']);
+gulp.task('connect', function() {
+  connect.server({
+    root: 'dist',
+    livereload: true
+  });
+});
 
-gulp.task('build', ['copy', 'rollup', 'precompile']);
+gulp.task('default', ['copy', 'rollup', 'precompile', 'connect', 'watch']);
+
+gulp.task('build', ['copy', 'rollup', 'connect', 'precompile']);
