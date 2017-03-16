@@ -26,7 +26,7 @@
     "rollup-plugin-babel": "^2.2.0"
   },
   "dependencies": {
-    "lodestar-ractive": "1.1.0",
+    "lodestar-ractive": "1.1.2",
     "ractive": "0.7.3"
   }
 }
